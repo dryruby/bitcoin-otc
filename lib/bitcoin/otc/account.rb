@@ -5,6 +5,14 @@ module Bitcoin module OTC
   # Represents a `#bitcoin-otc` user account.
   class Account
     ##
+    # Returns `true` if the given `#bitcoin-otc` nick is registered.
+    #
+    # @return [Boolean]
+    def self.exists?(nick)
+      !(Client.load('viewgpg.php', :nick => nick).empty?)
+    end
+
+    ##
     # Enumerates every `#bitcoin-otc` user account.
     #
     # @yield  [account] each account
