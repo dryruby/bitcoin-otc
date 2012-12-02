@@ -1,4 +1,5 @@
 require 'date'
+require 'json'
 
 module Bitcoin module OTC
   ##

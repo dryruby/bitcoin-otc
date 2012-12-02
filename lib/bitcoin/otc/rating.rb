@@ -1,11 +1,15 @@
 require 'date'
+require 'json'
 
 module Bitcoin module OTC
   ##
   # Represents a `#bitcoin-otc` rating entry.
   class Rating
     ##
-    # @param  [Integer, #to_i] id
+    # @overload initialize(id)
+    #   @param  [Integer] id
+    # @overload initialize(data)
+    #   @param  [Hash] data
     def initialize(id_or_data)
       case id_or_data
         when Hash
@@ -25,31 +29,53 @@ module Bitcoin module OTC
       end
     end
 
+    ##
+    # The rating identifier.
+    #
     # @return [Integer]
     attr_reader :id
 
+    ##
+    # The nick of the user who created this rating.
+    #
     # @return [String]
     attr_reader :rater_nick
 
+    ##
+    # The nick of the user being rated.
+    #
     # @return [String]
     attr_reader :rated_nick
 
+    ##
+    # The rating's creation date.
+    #
     # @return [DateTime]
     attr_reader :created_at
 
+    ##
+    # The rating's numerical value.
+    #
     # @return [Integer]
     attr_reader :rating
 
+    ##
+    # The rating's informational content.
+    #
     # @return [String]
     attr_reader :notes
 
     ##
+    # Returns the account of the user who created this rating.
+    #
     # @return [Account]
     def rater
       Account[self.rater_nick]
     end
 
     ##
+    # Returns the account of the user being rated.
+    #
     # @return [Account]
     def rated
       Account[self.rater_nick]
