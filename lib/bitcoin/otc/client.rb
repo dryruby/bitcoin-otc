@@ -60,7 +60,7 @@ module Bitcoin module OTC
           when Net::HTTPSuccess
             JSON.parse(response.body)
           else
-            raise Error.new("Failed to retrive #bitcoin-otc data", response)
+            raise Error.new("failed to retrive #bitcoin-otc data", response)
         end
       end
     end

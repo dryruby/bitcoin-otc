@@ -18,7 +18,10 @@ module Bitcoin module OTC
             end
             self.instance_variable_set("@#{attr}", value)
           end
-        else @id = id_or_data.to_i
+        when Integer, String
+          @id = id_or_data.to_i
+        else
+          raise TypeError, "expected an Integer or Hash, but got #{id_or_data.inspect}"
       end
     end
 

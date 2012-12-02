@@ -1,11 +1,32 @@
+require 'date'
+
 module Bitcoin module OTC
   ##
   # Represents a `#bitcoin-otc` user account.
   class Account
     ##
     # @param  [String, #to_s] nick
-    def initialize(nick)
-      @nick = nick.to_s
+    def initialize(nick_or_data)
+      case nick_or_data
+        when Hash # pass through
+        when String
+          @nick = nick_or_data.to_s
+          entries = Client.load('viewgpg.php', :nick => @nick)
+          raise ArgumentError, "unknown #bitcoin-otc nick '#{@nick}'" if entries.empty?
+          nick_or_data = entries.first
+        else
+          raise TypeError, "expected a String or Hash, but got #{nick_or_data.inspect}"
+      end
+
+      nick_or_data.each do |attr, value|
+        case attr.to_sym
+          when :id
+            value = value.to_i
+          when :registered_at
+            value = DateTime.strptime(value, '%s') unless value.is_a?(DateTime)
+        end
+        self.instance_variable_set("@#{attr}", value)
+      end
     end
 
     # @return [Integer]
@@ -14,7 +35,7 @@ module Bitcoin module OTC
     # @return [String]
     attr_reader :nick
 
-    # @return [Date]
+    # @return [DateTime]
     attr_reader :registered_at
 
     # @return [String]
