@@ -1,11 +1,25 @@
+require 'date'
+
 module Bitcoin module OTC
   ##
   # Represents a `#bitcoin-otc` rating entry.
   class Rating
     ##
     # @param  [Integer, #to_i] id
-    def initialize(id)
-      @id = id.to_i
+    def initialize(id_or_data)
+      case id_or_data
+        when Hash
+          id_or_data.each do |attr, value|
+            case attr.to_sym
+              when :id, :rating
+                value = value.to_i
+              when :created_at
+                value = DateTime.strptime(value, '%s') unless value.is_a?(DateTime)
+            end
+            self.instance_variable_set("@#{attr}", value)
+          end
+        else @id = id_or_data.to_i
+      end
     end
 
     # @return [Integer]
@@ -17,7 +31,7 @@ module Bitcoin module OTC
     # @return [String]
     attr_reader :rated_nick
 
-    # @return [Date]
+    # @return [DateTime]
     attr_reader :created_at
 
     # @return [Integer]
@@ -51,7 +65,16 @@ module Bitcoin module OTC
     #
     # @return [String]
     def to_json
-      self.to_hash.to_json
+      hash = self.to_hash
+      hash.each do |attr, value|
+        case attr
+          when :id, :rating
+            hash[attr] = value.to_s
+          when :created_at
+            hash[attr] = value.strftime('%s')
+        end
+      end
+      hash.to_json
     end
 
     ##
@@ -59,8 +82,8 @@ module Bitcoin module OTC
     #
     # @return [Hash]
     def to_hash
-      %w(id rater_nick rated_nick created_at rating notes).inject({}) do |hash, attr|
-        hash[attr.to_sym] = self.instance_variable_get("@#{attr}")
+      %w(id rater_nick rated_nick created_at rating notes).map(&:to_sym).inject({}) do |hash, attr|
+        hash[attr] = self.instance_variable_get("@#{attr}")
         hash
       end
     end

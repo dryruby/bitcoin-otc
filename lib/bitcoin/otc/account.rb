@@ -31,8 +31,8 @@ module Bitcoin module OTC
     #
     # @return [Array<Rating>]
     def ratings
-      data = Client.load('viewratingdetail.php', :nick => self.nick)
-      [] # TODO
+      entries = Client.load('viewratingdetail.php', :nick => self.nick)
+      entries.map { |entry| Rating.new(entry) }
     end
   end # Account
 end end # Bitcoin::OTC
