@@ -18,6 +18,7 @@ module Bitcoin module OTC
   #   account.fingerprint     #=> "FE0A49F7154638A73DBF0EFD74D266C6748B3546"
   #   account.bitcoinaddress  #=> "1Es4dCurqKxNSqK5W8Adb8WKTbrvKrDdQZ"
   #   account.registered_at   #=> #<DateTime: 2012-10-08T02:43:34+00:00>
+  #   account.rating          #=> 7
   #
   # @example Enumerating ratings for an account
   #   account = Bitcoin::OTC::Account['bendiken']
@@ -122,7 +123,15 @@ module Bitcoin module OTC
     attr_reader :bitcoinaddress
 
     ##
-    # Returns the ratings for this account.
+    # Returns the rating for this account.
+    #
+    # @return [Integer]
+    def rating
+      self.ratings.inject(0) { |sum, rating| sum += rating.to_i }
+    end
+
+    ##
+    # Returns the rating entries for this account.
     #
     # @return [Array<Rating>]
     def ratings
