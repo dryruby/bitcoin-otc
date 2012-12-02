@@ -46,13 +46,13 @@ module Bitcoin module OTC
     ##
     # @return [Account]
     def rater
-      Account.new(self.rater_nick)
+      Account[self.rater_nick]
     end
 
     ##
     # @return [Account]
     def rated
-      Account.new(self.rater_nick)
+      Account[self.rater_nick]
     end
 
     ##
