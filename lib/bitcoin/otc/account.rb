@@ -5,7 +5,27 @@ module Bitcoin module OTC
   # Represents a `#bitcoin-otc` user account.
   class Account
     ##
-    # @param  [String, #to_s] nick
+    # Enumerates every `#bitcoin-otc` user account.
+    #
+    # @yield  [account] each account
+    # @yieldparam  [Account] account
+    # @yieldreturn [void] ignored
+    # @return [Enumerator]
+    def self.each(&block)
+      if block_given?
+        entries = Client.load('viewgpg.php')
+        entries.each do |entry|
+          block.call(self.new(entry))
+        end
+      end
+      to_enum
+    end
+
+    ##
+    # @overload initialize(nick)
+    #   @param  [String] nick
+    # @overload initialize(data)
+    #   @param  [Hash] data
     def initialize(nick_or_data)
       case nick_or_data
         when Hash # pass through
