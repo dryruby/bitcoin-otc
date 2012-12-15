@@ -53,6 +53,13 @@ Author
 
 * [Arto Bendiken](mailto:arto@bendiken.net) - <https://github.com/bendiken>
 
+Donations
+---------
+
+If you found this software useful and would like to encourage its
+maintenance and further development, please consider making a donation to
+the Bitcoin wallet address `1JAiiZ5FozEHgRAz3XMHYRPxWpZkzHwG5E`.
+
 License
 -------
 
